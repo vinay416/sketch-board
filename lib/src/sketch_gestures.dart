@@ -1,4 +1,6 @@
+import 'package:canvas_paint/view_model/sketch_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../model/sketch_paint_model.dart';
 import 'sketch_painter.dart';
@@ -12,37 +14,40 @@ class SketchGesture extends StatefulWidget {
 }
 
 class _SketchGestureState extends State<SketchGesture> {
-  List<SketchPaintModel> sketchs = [];
-  int currentSketchIndex = 0;
-
+  late SketchViewModel sketchVM;
+  
   @override
   void initState() {
-    sketchs.add(widget.paintModel);
     super.initState();
+    sketchVM = context.read<SketchViewModel>();
+    sketchVM.addNewSketch(widget.paintModel, notify: false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ...buildAllSketch(),
-        currentSketch(sketchs[currentSketchIndex]),
-      ],
+    return Consumer<SketchViewModel>(
+      builder: (context, vm, child) {
+        final currentSketch = vm.sketchs.last;
+        return Stack(
+          children: [
+            ...buildAllSketch(vm.sketchs),
+            buildCurrentSketch(currentSketch),
+          ],
+        );
+      },
     );
   }
 
-  List<Widget> buildAllSketch() {
+  List<Widget> buildAllSketch(List<SketchPaintModel> sketchs) {
     return sketchs.sublist(0, sketchs.length - 1).map(buildBoard).toList();
   }
 
-  Widget currentSketch(SketchPaintModel sketchModel) {
+  Widget buildCurrentSketch(SketchPaintModel sketchModel) {
     return Listener(
       onPointerDown: (event) => onGestureMove(event, sketchModel),
       onPointerMove: (event) => onGestureMove(event, sketchModel),
       onPointerUp: (event) {
-        sketchs.add(widget.paintModel.copyWith(points: []));
-        currentSketchIndex = sketchs.length - 1;
-        setState(() {});
+        sketchVM.addNewSketch(widget.paintModel.copyWith(points: []));
       },
       child: buildBoard(sketchModel),
     );
@@ -52,7 +57,7 @@ class _SketchGestureState extends State<SketchGesture> {
     final rendreBox = context.findRenderObject() as RenderBox;
     final offset = rendreBox.globalToLocal(event.position);
     sketchModel.points.add(offset);
-    setState(() {});
+    sketchVM.updatePainter();
   }
 
   RepaintBoundary buildBoard(SketchPaintModel sketchModel) {
