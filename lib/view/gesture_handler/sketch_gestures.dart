@@ -2,8 +2,8 @@ import 'package:canvas_paint/view_model/sketch_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/sketch_paint_model.dart';
-import 'sketch_painter.dart';
+import '../../model/sketch_paint_model.dart';
+import '../sketch_painter/sketch_painter.dart';
 
 class SketchGesture extends StatefulWidget {
   const SketchGesture({super.key, required this.paintModel});
@@ -15,7 +15,7 @@ class SketchGesture extends StatefulWidget {
 
 class _SketchGestureState extends State<SketchGesture> {
   late SketchViewModel sketchVM;
-  
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +47,8 @@ class _SketchGestureState extends State<SketchGesture> {
       onPointerDown: (event) => onGestureMove(event, sketchModel),
       onPointerMove: (event) => onGestureMove(event, sketchModel),
       onPointerUp: (event) {
-        sketchVM.addNewSketch(widget.paintModel.copyWith(points: []));
+        final newSketch = sketchVM.sketchs.last.copyWith(points: []);
+        sketchVM.addNewSketch(newSketch);
       },
       child: buildBoard(sketchModel),
     );

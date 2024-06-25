@@ -1,4 +1,4 @@
-import 'package:canvas_paint/src/sketch_board.dart';
+import 'package:canvas_paint/view/sketch_board.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

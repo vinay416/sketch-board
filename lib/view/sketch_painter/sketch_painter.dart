@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/sketch_paint_model.dart';
+import '../../model/sketch_paint_model.dart';
 
 class SketchPainter extends CustomPainter {
   const SketchPainter({required this.sketchModel});
