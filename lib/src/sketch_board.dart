@@ -37,44 +37,56 @@ class SketchGesture extends StatefulWidget {
 }
 
 class _SketchGestureState extends State<SketchGesture> {
-  late SketchPaintModel paintModel;
+  List<SketchPaintModel> sketchs = [];
+  int currentSketchIndex = 0;
 
   @override
   void initState() {
-    paintModel = widget.paintModel;
+    sketchs.add(widget.paintModel);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ...buildAllSketch(),
+        currentSketch(sketchs[currentSketchIndex]),
+      ],
+    );
+  }
+
+  List<Widget> buildAllSketch() {
+    return sketchs.sublist(0, sketchs.length - 1).map(buildBoard).toList();
+  }
+
+  Widget currentSketch(SketchPaintModel sketchModel) {
     return Listener(
-      onPointerDown: (event) {
-        final rendreBox = context.findRenderObject() as RenderBox;
-        final offset = rendreBox.globalToLocal(event.position);
-        paintModel.points.add(offset);
-        setState(() {});
-      },
-      onPointerMove: (event) {
-        final rendreBox = context.findRenderObject() as RenderBox;
-        final offset = rendreBox.globalToLocal(event.position);
-        paintModel.points.add(offset);
-        setState(() {});
-      },
+      onPointerDown: (event) => onGestureMove(event, sketchModel),
+      onPointerMove: (event) => onGestureMove(event, sketchModel),
       onPointerUp: (event) {
-        final rendreBox = context.findRenderObject() as RenderBox;
-        final offset = rendreBox.globalToLocal(event.position);
-        paintModel.points.add(offset);
+        sketchs.add(widget.paintModel.copyWith(points: []));
+        currentSketchIndex = sketchs.length - 1;
+        setState(() {});
       },
-      child: RepaintBoundary(
-        child: CustomPaint(
-          painter: SketchPainter(
-            paintModel: widget.paintModel,
-          ),
-          child: Container(
-            // color: Colors.yellow,
-            height: double.infinity,
-            width: double.infinity,
-          ),
+      child: buildBoard(sketchModel),
+    );
+  }
+
+  void onGestureMove(PointerEvent event, SketchPaintModel sketchModel) {
+    final rendreBox = context.findRenderObject() as RenderBox;
+    final offset = rendreBox.globalToLocal(event.position);
+    sketchModel.points.add(offset);
+    setState(() {});
+  }
+
+  RepaintBoundary buildBoard(SketchPaintModel sketchModel) {
+    return RepaintBoundary(
+      child: CustomPaint(
+        painter: SketchPainter(sketchModel: sketchModel),
+        child: const SizedBox(
+          height: double.infinity,
+          width: double.infinity,
         ),
       ),
     );
@@ -82,28 +94,28 @@ class _SketchGestureState extends State<SketchGesture> {
 }
 
 class SketchPainter extends CustomPainter {
-  const SketchPainter({required this.paintModel});
-  final SketchPaintModel paintModel;
+  const SketchPainter({required this.sketchModel});
+  final SketchPaintModel sketchModel;
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (paintModel.points.isEmpty) return;
+    if (sketchModel.points.isEmpty) return;
 
     final paint = Paint()
-      // ..color = paintModel.penColor
+      ..color = sketchModel.penColor
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = paintModel.strokeSize
+      ..strokeWidth = sketchModel.strokeSize
       ..style =
-          paintModel.fillStroke ? PaintingStyle.fill : PaintingStyle.stroke;
+          sketchModel.fillStroke ? PaintingStyle.fill : PaintingStyle.stroke;
 
     final path = Path();
-    final p0 = paintModel.points.first;
+    final p0 = sketchModel.points.first;
     //move the point to 1st offset
     path.moveTo(p0.dx, p0.dy);
     //add the moving getsure points
-    for (var i = 1; i < paintModel.points.length - 1; i++) {
-      final p1 = paintModel.points[i];
-      final p2 = paintModel.points[i + 1];
+    for (var i = 1; i < sketchModel.points.length - 1; i++) {
+      final p1 = sketchModel.points[i];
+      final p2 = sketchModel.points[i + 1];
 
       final c1 = (p1.dx + p2.dx) / 2;
       final c2 = (p1.dy + p2.dy) / 2;
