@@ -6,8 +6,7 @@ import '../../model/sketch_paint_model.dart';
 import '../sketch_painter/sketch_painter.dart';
 
 class SketchGesture extends StatefulWidget {
-  const SketchGesture({super.key, required this.paintModel});
-  final SketchPaintModel paintModel;
+  const SketchGesture({super.key});
 
   @override
   State<SketchGesture> createState() => _SketchGestureState();
@@ -20,7 +19,7 @@ class _SketchGestureState extends State<SketchGesture> {
   void initState() {
     super.initState();
     sketchVM = context.read<SketchViewModel>();
-    sketchVM.addNewSketch(widget.paintModel, notify: false);
+    sketchVM.addNewSketch(sketchVM.defaultSketch, notify: false);
   }
 
   @override
