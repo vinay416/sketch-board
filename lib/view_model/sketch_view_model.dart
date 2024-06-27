@@ -27,7 +27,7 @@ class SketchViewModel with ChangeNotifier {
 
   void updatePainter() => notifyListeners();
 
-  // Current tools value
+  //* Color tool
   Color get currentPenColor {
     if (_sketchs.isEmpty) return defaultSketch.penColor;
     return _sketchs.last.penColor;
@@ -35,18 +35,29 @@ class SketchViewModel with ChangeNotifier {
 
   void updateSketchColor(Color penColor) {
     final newSketch = _sketchs.last.copyWith(penColor: penColor, points: []);
-    addNewSketch(newSketch);
+    _updateSketch(newSketch);
   }
 
+  //* Stroke tool
   double get currentStrokeSize {
     if (_sketchs.isEmpty) return defaultSketch.strokeSize;
     return _sketchs.last.strokeSize;
   }
 
+  List<double> get strokeSizes => SketchDefault.strokes;
+
   void updateSketchStrokeSize(double size) {
-    // final newSketch = _sketchs.last.copyWith(penColor: penColor, points: []);
-    // addNewSketch(newSketch);
+    final newSketch = _sketchs.last.copyWith(strokeSize: size, points: []);
+    _updateSketch(newSketch);
   }
 
-  
+  //* update Sketch
+  void _updateSketch(SketchPaintModel newSketch) {
+    if (_sketchs.last.points.isEmpty) {
+      _sketchs.removeLast();
+      addNewSketch(newSketch);
+      return;
+    }
+    addNewSketch(newSketch);
+  }
 }

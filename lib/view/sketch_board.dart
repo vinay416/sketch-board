@@ -1,8 +1,9 @@
 import 'package:canvas_paint/view/gesture_handler/sketch_gestures.dart';
-import 'package:canvas_paint/view/sketch_tools/sketch_color_picker.dart';
+import 'package:canvas_paint/view/sketch_tools/colorizer/sketch_color_picker.dart';
 import 'package:flutter/material.dart';
 
-import 'sketch_tools/sketch_stroke_sizes.dart';
+import 'sketch_tools/pen_strokes/sketch_stroke_picker.dart';
+import 'sketch_tools/pen_strokes/sketch_stroke_sizes.dart';
 
 class SketchBoard extends StatelessWidget {
   const SketchBoard({super.key});
@@ -11,7 +12,7 @@ class SketchBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        buildTools(context),
+        buildTools(),
         const Divider(),
         buildBoard(),
       ],
@@ -22,11 +23,11 @@ class SketchBoard extends StatelessWidget {
     return const Expanded(child: SketchGesture());
   }
 
-  Widget buildTools(BuildContext context) {
+  Widget buildTools() {
     return Wrap(
-      children: [
-        SketchColorPicker.colorizer(context),
-        SketchStrokeSizes.pen(context),
+      children: const [
+        SketchColorPicker(),
+        SketchStrokePicker(),
       ],
     );
   }
