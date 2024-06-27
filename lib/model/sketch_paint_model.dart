@@ -1,5 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'sketch_paint_types.dart';
 
 class SketchPaintModel {
   const SketchPaintModel({
@@ -7,11 +7,13 @@ class SketchPaintModel {
     required this.stroke,
     required this.strokeSize,
     required this.points,
+    required this.type,
   });
   final Color penColor;
   final PaintingStyle stroke;
   final double strokeSize;
   final List<Offset> points;
+  final SketchPaintType type;
 
   factory SketchPaintModel.empty({
     required Color penColor,
@@ -19,6 +21,7 @@ class SketchPaintModel {
     required double strokeSize,
   }) {
     return SketchPaintModel(
+      type: SketchPaintType.pen,
       penColor: penColor,
       stroke: stroke,
       strokeSize: strokeSize,
@@ -31,8 +34,10 @@ class SketchPaintModel {
     PaintingStyle? stroke,
     double? strokeSize,
     List<Offset>? points,
+    SketchPaintType? type
   }) {
     return SketchPaintModel(
+      type: type ?? this.type,
       penColor: penColor ?? this.penColor,
       stroke: stroke ?? this.stroke,
       strokeSize: strokeSize ?? this.strokeSize,

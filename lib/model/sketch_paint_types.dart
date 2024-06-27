@@ -1,0 +1,4 @@
+enum SketchPaintType{
+  pen,
+  shape,
+}
