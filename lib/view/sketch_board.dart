@@ -3,6 +3,7 @@ import 'package:canvas_paint/view/sketch_tools/colorizer/sketch_color_picker.dar
 import 'package:flutter/material.dart';
 
 import 'sketch_tools/pen_strokes/sketch_stroke_picker.dart';
+import 'sketch_tools/shapes/sketch_shape_picker.dart';
 
 class SketchBoard extends StatelessWidget {
   const SketchBoard({super.key});
@@ -30,14 +31,15 @@ class SketchBoard extends StatelessWidget {
           side: BorderSide(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: SizedBox(
+        child: const SizedBox(
           width: double.infinity,
           child: Wrap(
             alignment: WrapAlignment.center,
             spacing: 20,
-            children: const [
+            children: [
               SketchColorPicker(),
               SketchStrokePicker(),
+              SketchShapePicker()
             ],
           ),
         ),

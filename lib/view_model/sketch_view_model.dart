@@ -1,9 +1,13 @@
 import 'package:canvas_paint/model/sketch_paint_model.dart';
+import 'package:canvas_paint/model/sketch_paint_type.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/sketch_default.dart';
 
 class SketchViewModel with ChangeNotifier {
+  SketchViewModel(){
+    addNewSketch(defaultSketch);
+  }
   List<SketchPaintModel> _sketchs = [];
   List<SketchPaintModel> get sketchs => List.unmodifiable(_sketchs);
 
@@ -29,7 +33,6 @@ class SketchViewModel with ChangeNotifier {
 
   //* Color tool
   Color get currentPenColor {
-    if (_sketchs.isEmpty) return defaultSketch.penColor;
     return _sketchs.last.penColor;
   }
 
@@ -40,7 +43,6 @@ class SketchViewModel with ChangeNotifier {
 
   //* Stroke tool
   double get currentStrokeSize {
-    if (_sketchs.isEmpty) return defaultSketch.strokeSize;
     return _sketchs.last.strokeSize;
   }
 
@@ -48,6 +50,18 @@ class SketchViewModel with ChangeNotifier {
 
   void updateSketchStrokeSize(double size) {
     final newSketch = _sketchs.last.copyWith(strokeSize: size, points: []);
+    _updateSketch(newSketch);
+  }
+
+  //* Shape tool
+  SketchPaintType get currentShape {
+    return _sketchs.last.type;
+  }
+
+  List<SketchPaintType> get strokeShapes => SketchPaintType.values;
+
+  void updateSketchShape(SketchPaintType shape) {
+    final newSketch = _sketchs.last.copyWith(type: shape, points: []);
     _updateSketch(newSketch);
   }
 

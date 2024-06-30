@@ -19,7 +19,6 @@ class _SketchGestureState extends State<SketchGesture> {
   void initState() {
     super.initState();
     sketchVM = context.read<SketchViewModel>();
-    sketchVM.addNewSketch(sketchVM.defaultSketch, notify: false);
   }
 
   @override

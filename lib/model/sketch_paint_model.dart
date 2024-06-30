@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sketch_paint_types.dart';
+import 'sketch_paint_type.dart';
 
 class SketchPaintModel {
   const SketchPaintModel({
