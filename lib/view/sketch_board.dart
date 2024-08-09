@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:canvas_paint/view/gesture_handler/sketch_gestures.dart';
 import 'package:canvas_paint/view/sketch_tools/colorizer/sketch_color_picker.dart';
 import 'package:flutter/material.dart';
