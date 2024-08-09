@@ -20,14 +20,11 @@ class SketchStrokePicker extends StatelessWidget {
       child: Selector<SketchViewModel, double>(
         selector: (p0, p1) => p1.currentStrokeSize,
         builder: (context, currentStrokeSize, child) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: CustomPaint(
-              painter: StrokeBrushIcon(
-                strokeSize: currentStrokeSize,
-              ),
-              size: const Size(50, 30),
+          return CustomPaint(
+            painter: StrokeBrushIcon(
+              strokeSize: currentStrokeSize,
             ),
+            size: const Size(50, 30),
           );
         },
       ),

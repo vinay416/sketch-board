@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../utils/sketch_default.dart';
 
 class SketchViewModel with ChangeNotifier {
-  SketchViewModel(){
+  SketchViewModel() {
     addNewSketch(defaultSketch);
   }
   List<SketchPaintModel> _sketchs = [];
@@ -22,11 +22,6 @@ class SketchViewModel with ChangeNotifier {
   void addNewSketch(SketchPaintModel sketch, {bool notify = true}) {
     _sketchs = [..._sketchs, sketch];
     if (notify) notifyListeners();
-  }
-
-  void clearSketch() {
-    _sketchs = [];
-    notifyListeners();
   }
 
   void updatePainter() => notifyListeners();
@@ -65,6 +60,32 @@ class SketchViewModel with ChangeNotifier {
     _updateSketch(newSketch);
   }
 
+  //* Undo/Redo sketch
+  SketchPaintModel? _undoSketch;
+
+  bool get undoAvailable => _sketchs.length > 1;
+  bool get redoAvailable => _undoSketch != null;
+
+  void onTapUndo() {
+    _undoSketch = _sketchs.elementAt(_sketchs.length - 2);
+    final copySketchs = [...sketchs];
+    copySketchs.remove(_undoSketch);
+    if (copySketchs.isEmpty) {
+      _sketchs = [defaultSketch];
+    } else {
+      _sketchs = [...copySketchs];
+    }
+    notifyListeners();
+  }
+
+  void onTapRedo() {
+    final List<SketchPaintModel> temp = [..._sketchs];
+    temp.insert(_sketchs.length - 1, _undoSketch!);
+    _sketchs = [...temp];
+    _undoSketch = null;
+    notifyListeners();
+  }
+
   //* update Sketch
   void _updateSketch(SketchPaintModel newSketch) {
     if (_sketchs.last.points.isEmpty) {
@@ -73,5 +94,12 @@ class SketchViewModel with ChangeNotifier {
       return;
     }
     addNewSketch(newSketch);
+  }
+
+  //* Clear all sketch
+  void clearSketch() {
+    _sketchs = [defaultSketch];
+    _undoSketch = null;
+    notifyListeners();
   }
 }

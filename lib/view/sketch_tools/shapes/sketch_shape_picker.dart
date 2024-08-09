@@ -11,7 +11,7 @@ class SketchShapePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final sketch = context.read<SketchViewModel>().sketchs.last;
+    final sketch = context.read<SketchViewModel>().sketchs.last;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -22,17 +22,13 @@ class SketchShapePicker extends StatelessWidget {
       child: Selector<SketchViewModel, SketchPaintType>(
         selector: (p0, p1) => p1.currentShape,
         builder: (context, currentShape, child) {
-
-          return Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: RepaintBoundary(
-              child: CustomPaint(
-                painter: SketchShapePainter(
-                 color: sketch.penColor,
-                 type: currentShape,
-                ),
-                size: const Size(25, 25),
+          return RepaintBoundary(
+            child: CustomPaint(
+              painter: SketchShapePainter(
+                color: sketch.penColor,
+                type: currentShape,
               ),
+              size: const Size(25, 25),
             ),
           );
         },
