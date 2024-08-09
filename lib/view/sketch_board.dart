@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:canvas_paint/view/gesture_handler/sketch_gestures.dart';
 import 'package:canvas_paint/view/sketch_tools/colorizer/sketch_color_picker.dart';
 import 'package:flutter/material.dart';
@@ -13,26 +15,44 @@ class SketchBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildTools(),
-        Divider(height: 1),
-        buildBoard(context),
-      ],
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        final landscape = orientation == Orientation.landscape;
+        if (landscape) {
+          return Row(
+            children: [
+              buildToolsCard(landscape),
+              buildBoard(context, landscape),
+            ],
+          );
+        }
+
+        return Column(
+          children: [
+            buildToolsCard(landscape),
+            Divider(height: 1),
+            buildBoard(context, landscape),
+          ],
+        );
+      },
     );
   }
 
-  Widget buildBoard(BuildContext context) {
+  Widget buildBoard(BuildContext context, bool landscape) {
     return ClipRect(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height - 140,
-        width: double.infinity,
+        height: landscape
+            ? double.infinity
+            : MediaQuery.of(context).size.height - 140,
+        width: landscape
+            ? MediaQuery.of(context).size.width - 115
+            : double.infinity,
         child: SketchGesture(),
       ),
     );
   }
 
-  Widget buildTools() {
+  Widget buildToolsCard(bool landscape) {
     return Padding(
       padding: const EdgeInsets.all(8.0).copyWith(bottom: 15),
       child: Material(
@@ -41,37 +61,44 @@ class SketchBoard extends StatelessWidget {
           side: BorderSide(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 20,
-            children: [
-              Wrap(
-                children: const [
-                  UndoSketchTool(),
-                  RedoSketchTool(),
-                ],
+        child: landscape
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: buildTools(landscape),
+              )
+            : Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 20,
+                children: buildTools(landscape),
               ),
-              buildSeparator(),
-              SketchColorPicker(),
-              SketchStrokePicker(),
-              SketchShapePicker(),
-              buildSeparator(),
-              ClearSketchTool(),
-            ],
-          ),
-        ),
       ),
     );
   }
 }
 
-Widget buildSeparator() {
+List<Widget> buildTools(bool landscape) {
+  return [
+    Wrap(
+      children: const [
+        UndoSketchTool(),
+        RedoSketchTool(),
+      ],
+    ),
+    buildSeparator(landscape),
+    SketchColorPicker(),
+    SketchStrokePicker(),
+    SketchShapePicker(),
+    if (landscape) SizedBox(height: 10),
+    buildSeparator(landscape),
+    ClearSketchTool(),
+  ];
+}
+
+Widget buildSeparator(bool landscape) {
   return Container(
-    height: 40,
-    width: 2,
+    height: landscape ? 2 : 40,
+    width: landscape ? 80 : 2,
     decoration: BoxDecoration(
       color: Colors.grey.shade400,
       borderRadius: BorderRadius.circular(10),

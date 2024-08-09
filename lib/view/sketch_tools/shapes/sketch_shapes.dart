@@ -43,10 +43,9 @@ class _SketchShapesState extends State<SketchShapes> {
         selector: (p0, p1) => p1.currentShape,
         builder: (context, currentShape, child) {
           final isSelected = currentShape == shape;
-          final color = vm.sketchs.last.penColor;
           return CustomPaint(
             painter: SketchShapePainter(
-              color: isSelected ? color : Colors.grey,
+              color: isSelected ? Colors.black : Colors.grey,
               type: shape,
             ),
             child: const SizedBox(

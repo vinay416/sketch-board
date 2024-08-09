@@ -2,14 +2,14 @@ import 'package:canvas_paint/model/sketch_paint_type.dart';
 import 'package:flutter/material.dart';
 
 class SketchShapePainter extends CustomPainter {
-  const SketchShapePainter({required this.color, required this.type});
-  final Color color;
+  const SketchShapePainter({ this.color, required this.type});
+  final Color? color;
   final SketchPaintType type;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color
+      ..color = color ?? Colors.black
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke;

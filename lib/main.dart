@@ -16,6 +16,7 @@ class MainApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => SketchViewModel(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: const Text("Sktech Board"),
