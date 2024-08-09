@@ -11,9 +11,11 @@ class UndoSketchTool extends StatelessWidget {
       selector: (p0, p1) => p1.undoAvailable,
       builder: (context, undoAvailable, child) {
         return IconButton(
-          onPressed: () {
-            context.read<SketchViewModel>().onTapUndo();
-          },
+          onPressed: undoAvailable
+              ? () {
+                  context.read<SketchViewModel>().onTapUndo();
+                }
+              : null,
           icon: Icon(
             Icons.undo_rounded,
             color: undoAvailable ? Colors.blue : Colors.grey,

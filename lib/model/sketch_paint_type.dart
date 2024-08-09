@@ -3,6 +3,5 @@ enum SketchPaintType{
   rectangle,
   roundRectangle,
   circle,
-  triangle,
   line,
 }

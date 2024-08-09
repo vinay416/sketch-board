@@ -36,19 +36,11 @@ class SketchPainter extends CustomPainter {
       return canvas.drawRRect(rect, paint);
     }
     if (sketchModel.type == SketchPaintType.circle) {
-      final wRadii = ((p0.dx + p1.dx) / 2);
-      final hRadii = ((p0.dy + p1.dy) / 2);
+      final wRadii = ((p1.dx - p0.dx) / 2);
+      final hRadii = ((p1.dy - p0.dy) / 2);
       final radii = wRadii > hRadii ? wRadii : hRadii;
 
-      final rect = RRect.fromRectAndRadius(
-        Rect.fromPoints(p0, p1),
-        Radius.circular(radii),
-      );
-
-      return canvas.drawRRect(
-        rect,
-        paint,
-      );
+      return canvas.drawCircle(p0, radii, paint);
     }
 
     //* Free flow

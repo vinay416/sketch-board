@@ -38,14 +38,6 @@ class SketchShapePainter extends CustomPainter {
       );
       return canvas.drawRRect(rRect, paint);
     }
-    if (type == SketchPaintType.triangle) {
-      final path = Path()
-        ..moveTo(width / 2, 0)
-        ..lineTo(width, height)
-        ..lineTo(0, height)
-        ..close();
-      return canvas.drawPath(path, paint);
-    }
     if (type == SketchPaintType.line) {
       final p0 = Offset(0, height / 2);
       final p1 = Offset(width, height / 2);
@@ -58,8 +50,8 @@ class SketchShapePainter extends CustomPainter {
       ..lineTo(width, height)
       ..lineTo(width * 0.5, height)
       ..lineTo(0, height * 0.5)
-      ..moveTo(5, 5)
-      ..lineTo(width * 0.6, height * 0.6);
+      ..moveTo(width * 0.7, height * 0.7)
+      ..lineTo(width, height);
 
     final circle = Rect.fromCircle(
       center: Offset(width * 0.15, height * 0.15),

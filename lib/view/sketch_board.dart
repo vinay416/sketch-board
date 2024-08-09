@@ -16,18 +16,25 @@ class SketchBoard extends StatelessWidget {
     return Column(
       children: [
         buildTools(),
-        buildBoard(),
+        Divider(height: 1),
+        buildBoard(context),
       ],
     );
   }
 
-  Expanded buildBoard() {
-    return const Expanded(child: SketchGesture());
+  Widget buildBoard(BuildContext context) {
+    return ClipRect(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height - 140,
+        width: double.infinity,
+        child: SketchGesture(),
+      ),
+    );
   }
 
   Widget buildTools() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0).copyWith(bottom: 15),
       child: Material(
         elevation: 10,
         shape: RoundedRectangleBorder(

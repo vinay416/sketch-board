@@ -19,6 +19,7 @@ class MainApp extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             title: const Text("Sktech Board"),
+            toolbarHeight: 40,
           ),
           body: const SketchBoard(),
         ),

@@ -11,9 +11,11 @@ class RedoSketchTool extends StatelessWidget {
       selector: (p0, p1) => p1.redoAvailable,
       builder: (context, redoAvailable, child) {
         return IconButton(
-          onPressed: () {
-            context.read<SketchViewModel>().onTapRedo();
-          },
+          onPressed: redoAvailable
+              ? () {
+                  context.read<SketchViewModel>().onTapRedo();
+                }
+              : null,
           icon: Icon(
             Icons.redo_rounded,
             color: redoAvailable ? Colors.blue : Colors.grey,
