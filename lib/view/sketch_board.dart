@@ -19,8 +19,8 @@ class SketchBoard extends StatelessWidget {
         if (landscape) {
           return Row(
             children: [
-              buildToolsCard(landscape),
               buildBoard(context, landscape),
+              buildToolsCard(landscape),
             ],
           );
         }
@@ -37,15 +37,17 @@ class SketchBoard extends StatelessWidget {
   }
 
   Widget buildBoard(BuildContext context, bool landscape) {
-    return ClipRect(
-      child: SizedBox(
-        height: landscape
-            ? double.infinity
-            : MediaQuery.of(context).size.height - 140,
-        width: landscape
-            ? MediaQuery.of(context).size.width - 115
-            : double.infinity,
-        child: SketchGesture(),
+    return Expanded(
+      child: ClipRect(
+        child: SizedBox(
+          height: landscape
+              ? double.infinity
+              : MediaQuery.of(context).size.height - 140,
+          width: landscape
+              ? MediaQuery.of(context).size.width - 115
+              : double.infinity,
+          child: SketchGesture(),
+        ),
       ),
     );
   }
